@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +19,10 @@
     tools:context=".SummaryFragment">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.cupcake.model.OrderViewModel" />
-
         <variable
             name="summaryFragment"
             type="com.example.cupcake.SummaryFragment" />
@@ -62,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/order_summary_margin"
-                    android:text="@{viewModel.quantity.toString()}"
+                    android:text="@{viewModel.orderQuantity.toString()}"
                     tools:text="6 cupcakes" />
 
                 <View
@@ -85,8 +84,8 @@
                     style="@style/Widget.Cupcake.TextView.OrderSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/order_summary_margin"
                     android:text="@{viewModel.flavor}"
+                    android:layout_marginTop="@dimen/order_summary_margin"
                     tools:text="Chocolate" />
 
                 <View
@@ -109,8 +108,8 @@
                     style="@style/Widget.Cupcake.TextView.OrderSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.pickupDate}"
                     android:layout_marginTop="@dimen/order_summary_margin"
-                    android:text="@{viewModel.date}"
                     tools:text="Sunday" />
 
                 <View
@@ -129,7 +128,7 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/side_margin"
                     android:text="@{@string/total_price(viewModel.price)}"
-                    tools:text="Total $5.00" />
+                    tools:text="@{@string/total_price(viewModel.price)}" />
 
             </LinearLayout>
 
@@ -140,7 +139,6 @@
                 android:layout_marginTop="@dimen/side_margin"
                 android:onClick="@{() -> summaryFragment.sendOrder()}"
                 android:text="@string/send" />
-
             <Button
                 android:id="@+id/cancel_button"
                 style="?attr/materialButtonOutlinedStyle"
