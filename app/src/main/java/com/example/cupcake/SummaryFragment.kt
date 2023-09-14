@@ -15,13 +15,17 @@
  */
 package com.example.cupcake
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.cupcake.databinding.FragmentSummaryBinding
+import com.example.cupcake.model.OrderViewModel
 
 /**
  * [SummaryFragment] contains a summary of the order details with a button to share the order
@@ -33,6 +37,9 @@ class SummaryFragment : Fragment() {
     // This property is non-null between the onCreateView() and onDestroyView() lifecycle callbacks,
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentSummaryBinding? = null
+
+    //shared viewmodel scoped to the activity this fragment resides in
+    val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,15 +54,39 @@ class SummaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
-            sendButton.setOnClickListener { sendOrder() }
+            viewModel = sharedViewModel
+            lifecycleOwner = viewLifecycleOwner
+            summaryFragment = this@SummaryFragment
+
         }
+
     }
 
     /**
      * Submit the order by sharing out the order details to another app via an implicit intent.
      */
     fun sendOrder() {
-        Toast.makeText(activity, "Send Order", Toast.LENGTH_SHORT).show()
+        //build order string
+        val orderQuantity = sharedViewModel.orderQuantity.value ?: 0
+        val orderDetailsString = getString(
+            R.string.order_details,
+            resources.getQuantityString(R.plurals.cupcakes, orderQuantity, orderQuantity),
+            sharedViewModel.flavor.value,
+            sharedViewModel.pickupDate.value,
+            sharedViewModel.price.value
+        )
+
+        val emailIntent = Intent(Intent.ACTION_SEND).setType("plain/text")
+            .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.new_cupcake_order))
+            .putExtra(Intent.EXTRA_TEXT, orderDetailsString)
+
+        //app will crash if there is no app that can handle the email intent
+        if (activity?.packageManager?.resolveActivity(emailIntent, 0) != null) {
+            requireContext().startActivity(emailIntent)
+        }
+
+
+        //send the intent
     }
 
     /**
@@ -65,5 +96,10 @@ class SummaryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    fun cancelOrder() {
+        sharedViewModel.resetOrder();
+        findNavController().navigate(R.id.action_summaryFragment_to_startFragment)
     }
 }

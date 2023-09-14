@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".StartFragment">
+
+    <data>
+
+        <variable
+            name="sharedViewModel"
+            type="com.example.cupcake.model.OrderViewModel" />
+        
+        <variable
+            name="startFragment"
+            type="com.example.cupcake.StartFragment" />
+    </data>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -54,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_between_elements"
+                android:onClick="@{() -> startFragment.orderCupcake(1)}"
                 android:minWidth="@dimen/order_cupcake_button_width"
                 android:text="@string/one_cupcake" />
 
@@ -63,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_between_elements"
+                android:onClick="@{() -> startFragment.orderCupcake(6)}"
                 android:minWidth="@dimen/order_cupcake_button_width"
                 android:text="@string/six_cupcakes" />
 
@@ -73,6 +85,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_between_elements"
                 android:minWidth="@dimen/order_cupcake_button_width"
+                android:onClick="@{() -> startFragment.orderCupcake(12)}"
                 android:text="@string/twelve_cupcakes" />
         </LinearLayout>
     </ScrollView>
